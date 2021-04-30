@@ -36,6 +36,6 @@
         state: started
         pull: true
         published_ports:
-          - "8080:8080"
+          - "8089:8089"
         env: #variables de entorno del back
           DATABASE_URL: '{{ database_url }}' #esta variable se pasa cuando llamemos al playbook con -e
