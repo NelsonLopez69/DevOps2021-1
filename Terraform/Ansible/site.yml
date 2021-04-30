@@ -1,3 +1,4 @@
 - import_playbook: all.yml
 - import_playbook: frontend.yml
 - import_playbook: backend.yml
+- import_playbook: database.yml

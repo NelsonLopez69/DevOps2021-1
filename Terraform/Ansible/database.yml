@@ -1,0 +1,36 @@
+- host: bd
+  become: yes
+
+  tasks: 
+    - name: get information on database container
+      docker_container_info: 
+        name: apachedb #nombre del contenedor que queremos mirar
+      register: result #guarda el resultado del contendor
+
+    - name: Does container exists?
+      ansible_builtin.debug: 
+        msg: "The container {{ 'exists' if result.exists else 'doesn't exist' }}"
+      
+#   - name: Stop container
+#     docker_container:
+#       name: appDatabase
+#       state: stopped
+#     when: result.exists
+
+#   - name: Remove container
+#     docker_container:
+#       name: appDatabase
+#       state: absent
+    
+    - name: Execute docker container
+      docker_container: 
+        name: apachedb
+        image: couchdb
+        state: started
+        pull: true
+        published_ports:
+          - "5984:5984"
+        env:
+          COUCHDB_USER: '{{ user }}'
+          COUCHDB_PASSWORD: '{{ password }}'
+      where: result.exists != "true"
