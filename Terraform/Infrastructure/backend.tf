@@ -78,9 +78,24 @@ resource "aws_instance" "lb-back" {
   vpc_security_group_ids = ["${aws_security_group.sg-load-balancer-back.id}"]
 
   tags = {
-          Name = "estudiantes_automatizacion_2021_4_lb_back"
+    Name = "estudiantes_automatizacion_2021_4_lb_back"
 
   }
+/*
+  provisioner "remote-exec" {
+    inline = ["echo 'Wait until SSH is ready'"]
+
+    connection {
+      type        = "ssh"
+      user        = //User's variable to log in
+      private_key = //The private key (local.private_key_path)
+      host        = //The host public or private ip address aws_instance.nginx.public_ip
+    }
+  }
+  provisioner "local-exec" {
+    command = "ansible-playbook  -i ${aws_instance.nginx.public_ip}, --private-key ${local.private_key_path} nginx.yaml"
+  }
+*/
 }
 
 
@@ -100,10 +115,11 @@ resource "aws_launch_template" "launch-template-back" {
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_back"
+    responsible = "estudiantes_automatizacion_2021_4"
   }
 
   tag_specifications {
-    resource_type = "volume"
+    resource_type = "instance"
     
     tags = {
     Name = "estudiantes_automatizacion_2021_4_back"
@@ -129,4 +145,6 @@ resource "aws_autoscaling_group" "back-tf-asg" {
     "responsible" = var.tag_responsible
   } ]
 }
+
+
 

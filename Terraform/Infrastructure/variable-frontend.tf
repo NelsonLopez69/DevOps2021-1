@@ -101,7 +101,7 @@ variable "lb_front_sg_in_traffic_cird" {
 
 variable "front_launch_template_name" {
   type    = string
-  default = "terraform-launch-template-front-grupo4"
+  default = "tf-launch-template-front-grupo4"
 }
 
 variable "front_launch_template_instance_type" {

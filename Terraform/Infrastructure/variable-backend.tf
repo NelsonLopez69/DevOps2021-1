@@ -126,7 +126,7 @@ variable "lb_back_sg_in_ingress_ssh_cird" {
 
 variable "back_launch_template_name" {
   type    = string
-  default = "terraform-launch-template-back-grupo4"
+  default = "tf-launch-template-back-grupo4"
 }
 
 variable "back_launch_template_instance_type" {

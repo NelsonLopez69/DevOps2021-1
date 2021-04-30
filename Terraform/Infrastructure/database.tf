@@ -40,5 +40,6 @@ resource "aws_instance" "db" {
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_db"
+    responsible = "estudiantes_automatizacion_2021_4"
   }
 }

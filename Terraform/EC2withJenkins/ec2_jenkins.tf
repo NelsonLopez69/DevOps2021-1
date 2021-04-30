@@ -28,7 +28,8 @@ resource "aws_instance" "G4_DevOps_jenkins" {
 	   EOF
 
   tags = {
-    Name = "Ec2-User-data"
+    Name = "JenkinsEC2_G4",
+    responsible = var.key_name
   }
   
 }

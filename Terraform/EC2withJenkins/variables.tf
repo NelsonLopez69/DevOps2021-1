@@ -14,3 +14,4 @@ variable "key_name" {
   type    = string
   default = "estudiantes_automatizacion_2021_4"
 }
+

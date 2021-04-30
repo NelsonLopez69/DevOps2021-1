@@ -8,7 +8,7 @@
 ##Tengo que usar dos eip, una para el load balancer y otra para el nat gateway?
 
 
-
+/*
 ##Network
 resource "aws_internet_gateway" "igw" {
   vpc_id      = data.aws_vpc.grupo4-vpc.id
@@ -17,6 +17,7 @@ resource "aws_internet_gateway" "igw" {
     Name = "estudiantes_automatizacion_2021_4"
   }
 }
+*/
 
 resource "aws_eip" "eip-lb" {
   instance = aws_instance.lb-front.id
@@ -140,6 +141,7 @@ resource "aws_instance" "lb-front" {
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_lb_front"
+    responsible = "estudiantes_automatizacion_2021_4"
   }
 }
 
@@ -158,10 +160,11 @@ resource "aws_launch_template" "launch-template-front" {
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_front"
+    responsible = "estudiantes_automatizacion_2021_4"
   }
 
   tag_specifications {
-    resource_type = "volume"
+    resource_type = "instance"
     
     tags = {
     Name = "estudiantes_automatizacion_2021_4_front"
