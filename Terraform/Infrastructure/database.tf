@@ -1,4 +1,5 @@
 resource "aws_security_group" "sg-db-instance" {
+  name = "estudiantes_automatizacion_2021_4_db"
   description = var.db_description
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -11,11 +12,11 @@ resource "aws_security_group" "sg-db-instance" {
   }
   
   ingress {
-    description = var.db_ingress_app_description
-    from_port   = var.db_ingress_app_port
-    to_port     = var.db_ingress_app_port
-    protocol    = var.db_ingress_app_protocol
-    cidr_blocks = var.db_ingress_app_cird
+    description = var.db_ingress_description
+    from_port   = var.db_ingress_port
+    to_port     = var.db_ingress_port
+    protocol    = var.db_ingress_protocol
+    cidr_blocks = var.db_ingress_cird
   }
 
   egress {
@@ -36,10 +37,12 @@ resource "aws_instance" "db" {
   ami = var.ami_id
   subnet_id = "subnet-092430b94a12ef07e"
   instance_type = "t2.micro"
+  key_name               = var.key_name
   vpc_security_group_ids = ["${aws_security_group.sg-db-instance.id}"]
+  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
+
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_db"
-    responsible = "estudiantes_automatizacion_2021_4"
   }
 }

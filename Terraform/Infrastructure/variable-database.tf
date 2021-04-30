@@ -34,30 +34,27 @@ variable "db_ingress_ssh_cird" {
   description = "This is the list of CIDR"
 }
 
-#########
-## APP ##
-#########
 
 ##Cambiar al puerto de la db y el ingress cidr por el de las subnets pv
-variable "db_ingress_app_description" {
+variable "db_ingress_description" {
   type        = string
   default     = "Allow traffic trough port wwwx from anywhere"
   description = "This is the description for the inbound rule that allowed traffic through the port wxxx from the backend to db"
 }
 
-variable "db_ingress_app_port" {
+variable "db_ingress_port" {
   type        = number
-  default     = 8080
-  description = "This is the port for the inbound rule that allowed traffic through the port 8080 from the backend to db"
+  default     = 5984
+  description = "This is the port for the inbound rule that allowed traffic through the port to db"
 }
 
-variable "db_ingress_app_protocol" {
+variable "db_ingress_protocol" {
   type        = string
   default     = "tcp"
   description = "This is the protocol for the inbound rule that allowed traffic through the port wwx from the backend to db"
 }
 
-variable "db_ingress_app_cird" {
+variable "db_ingress_cird" {
   type        = list(string)
   default     = [ "0.0.0.0/0" ]
   description = "This is the list of CIDR"

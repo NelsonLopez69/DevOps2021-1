@@ -8,8 +8,9 @@
 ##Tengo que usar dos eip, una para el load balancer y otra para el nat gateway?
 
 
-/*
+
 ##Network
+
 resource "aws_internet_gateway" "igw" {
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -17,7 +18,6 @@ resource "aws_internet_gateway" "igw" {
     Name = "estudiantes_automatizacion_2021_4"
   }
 }
-*/
 
 resource "aws_eip" "eip-lb" {
   instance = aws_instance.lb-front.id
@@ -25,45 +25,62 @@ resource "aws_eip" "eip-lb" {
 }
 
 resource "aws_eip" "eip-ngw" {
-  vpc      = true
+  vpc  = true
 }
 
 
-resource "aws_route_table" "rt-back" {
+resource "aws_route_table" "rt-public" {
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
   route {
-    cidr_block = "10.0.2.0/24"
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+}
+
+resource "aws_route_table_association" "public-subnet-a-rt" {
+  subnet_id     = data.aws_subnet.public-subnet-a.id
+  route_table_id = aws_route_table.rt-public.id
+}
+
+resource "aws_route_table_association" "public-subnet-b-rt" {
+  subnet_id     = data.aws_subnet.public-subnet-b.id
+  route_table_id = aws_route_table.rt-public.id
+}
+
+
+resource "aws_route_table" "rt-private" {
+  vpc_id      = data.aws_vpc.grupo4-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.ngw.id
   }
-
-    route {
-    cidr_block = "10.0.4.0/24"
-    nat_gateway_id = aws_nat_gateway.ngw.id
-  }
+}
 
 
-  tags = {
-    Name = "example"
-  }
+resource "aws_route_table_association" "private-subnet-a-rt" {
+  subnet_id     = data.aws_subnet.private-subnet-a.id
+  route_table_id = aws_route_table.rt-private.id
+}
+
+resource "aws_route_table_association" "private-subnet-b-rt" {
+  subnet_id     = data.aws_subnet.private-subnet-b.id
+  route_table_id = aws_route_table.rt-private.id
 }
 
 
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.eip-ngw.id
-  subnet_id     = data.aws_subnet.public-subnet-a.id
-
-  tags = {
-    Name = "estudiantes_automatizacion_2021_4"
-  }
+  subnet_id     = data.aws_subnet.private-subnet-a.id
 }
-
-
 
 
 ###Frontend##################
 
 resource "aws_security_group" "sg-front-instance" {
+  name = "estudiantes_automatizacion_2021_4_front_sg"
   description = var.front_sg_description
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -93,11 +110,13 @@ resource "aws_security_group" "sg-front-instance" {
 
   tags = {
     "responsible" = var.tag_responsible
+    "Name" = var.tag_responsible
   }
 }
 
 
 resource "aws_security_group" "sg-load-balancer-front" {
+  name = "estudiantes_automatizacion_2021_4_front"
   description = var.lb_front_sg_description
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -137,11 +156,13 @@ resource "aws_instance" "lb-front" {
   ami = var.ami_id
   subnet_id = "subnet-086d80cc0d3b06c82"
   instance_type = "t2.micro"
+  key_name               = var.key_name
   vpc_security_group_ids = ["${aws_security_group.sg-load-balancer-front.id}"]
+  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
+
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_lb_front"
-    responsible = "estudiantes_automatizacion_2021_4"
   }
 }
 
@@ -154,13 +175,13 @@ resource "aws_launch_template" "launch-template-front" {
   image_id               = var.ami_id
   name                   = var.front_launch_template_name
   instance_type          = var.front_launch_template_instance_type
+  key_name               = var.key_name
   vpc_security_group_ids = [ aws_security_group.sg-front-instance.id ]
 
   user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_front"
-    responsible = "estudiantes_automatizacion_2021_4"
   }
 
   tag_specifications {
@@ -189,5 +210,7 @@ resource "aws_autoscaling_group" "front-tf-asg" {
 
   tags = [ {
     "responsible" = var.tag_responsible
+    "name" = "estudiantes_automatizacion_2021_4_asg_front"
+
   } ]
 }

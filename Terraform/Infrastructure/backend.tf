@@ -2,6 +2,7 @@
 
 
 resource "aws_security_group" "sg-back-instance" {
+  name = "estudiantes_automatizacion_2021_4_back"
   description = var.back_sg_ingress_app_description
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -31,11 +32,13 @@ resource "aws_security_group" "sg-back-instance" {
 
   tags = {
     "responsible" = var.tag_responsible
+    "Name" = var.tag_responsible
   }
 }
 
 
 resource "aws_security_group" "sg-load-balancer-back" {
+  name = "estudiantes_automatizacion_2021_back"
   description = var.lb_back_sg_description
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
@@ -66,6 +69,7 @@ resource "aws_security_group" "sg-load-balancer-back" {
 
   tags = {
     "responsible" = var.tag_responsible
+    Name = "estudiantes_automatizacion_2021_4_lb_sg"
   }
 }
 
@@ -75,27 +79,13 @@ resource "aws_instance" "lb-back" {
   ami = var.ami_id
   subnet_id = "subnet-092430b94a12ef07e"
   instance_type = "t2.micro"
+  key_name               = var.key_name
   vpc_security_group_ids = ["${aws_security_group.sg-load-balancer-back.id}"]
+  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
 
   tags = {
-    Name = "estudiantes_automatizacion_2021_4_lb_back"
-
+          Name = "estudiantes_automatizacion_2021_4_lb_back"
   }
-/*
-  provisioner "remote-exec" {
-    inline = ["echo 'Wait until SSH is ready'"]
-
-    connection {
-      type        = "ssh"
-      user        = //User's variable to log in
-      private_key = //The private key (local.private_key_path)
-      host        = //The host public or private ip address aws_instance.nginx.public_ip
-    }
-  }
-  provisioner "local-exec" {
-    command = "ansible-playbook  -i ${aws_instance.nginx.public_ip}, --private-key ${local.private_key_path} nginx.yaml"
-  }
-*/
 }
 
 
@@ -108,6 +98,7 @@ resource "aws_launch_template" "launch-template-back" {
   image_id               = var.ami_id
   name                   = var.back_launch_template_name
   instance_type          = var.back_launch_template_instance_type
+  key_name               = var.key_name
   vpc_security_group_ids = [ aws_security_group.sg-back-instance.id ]
 
 
@@ -115,7 +106,6 @@ resource "aws_launch_template" "launch-template-back" {
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_back"
-    responsible = "estudiantes_automatizacion_2021_4"
   }
 
   tag_specifications {
@@ -143,8 +133,8 @@ resource "aws_autoscaling_group" "back-tf-asg" {
 
   tags = [ {
     "responsible" = var.tag_responsible
+    "Name" = var.tag_responsible
+
   } ]
 }
-
-
 
