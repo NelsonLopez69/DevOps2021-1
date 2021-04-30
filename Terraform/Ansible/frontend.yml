@@ -1,0 +1,42 @@
+- hosts: ui #se ejecuta solo para el target que tenga ui
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: get information on app front container
+      docker_container_info: 
+        name: appFront #nombre del contenedor que queremos mirar
+      register: result #guarda el resultado del contendor
+
+    - name: Does container exists?
+      ansible_builtin.debug: 
+        msg: "The container {{ 'exists' if result.exists else 'doesn't exist' }}"
+      
+    - name: Stop container
+      docker_container:
+        name: appFront
+        state: stopped
+      when: result.exists
+
+    - name: Remove container
+      docker_container:
+        name: appFront
+        state: absent
+    
+    - name: Remove image
+      docker_image:
+        name: appFront
+        state: absent
+
+    - name: Execute docker container
+      docker_container: 
+        name: appFront
+        image: douglaslopezmena/frontend
+        state: started
+        pull: true
+        published_ports:
+          - "8080:8080"
+        env: #variables de entorno del front
+          BACK_HOST: '{{ back_host }}' #esta variable se pasa cuando llamemos al playbook con -e
+
