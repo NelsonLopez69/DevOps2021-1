@@ -9,31 +9,33 @@
         name: appBack #nombre del contenedor que queremos mirar
       register: result #guarda el resultado del contendor
 
-    - name: Does container exists?
-      ansible_builtin.debug: 
-        msg: "The container {{ 'exists' if result.exists else 'doesn't exist' }}"
+    # - name: Does container exists?
+    #   ansible.builtin.debug: 
+    #     msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
       
-    - name: Stop container
-      docker_container:
-        name: appBack
-        state: stopped
-      when: result.exists
+    # - name: Stop container
+    #   docker_container:
+    #     name: appBack
+    #     state: stopped
+    #   when: result.exists
 
-    - name: Remove container
-      docker_container:
-        name: appBack
-        state: absent
+    # - name: Remove container  
+    #   docker_container:
+    #     name: appBack
+    #     state: absent
     
-    - name: Remove image
-      docker_image:
-        name: appBack
-        state: absent
+    # - name: Remove image
+    #   docker_image:
+    #     name: appBack
+    #     state: absent
 
     - name: Execute docker container
       docker_container: 
         name: appBack
         image: douglaslopezmena/backend
         state: started
+        detach: false
+        debug: true
         pull: true
         published_ports:
           - "8089:8089"
