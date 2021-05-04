@@ -152,7 +152,7 @@ variable "back_lb_type" {
 
 variable "back_lbl_protocol" {
   type    = string
-  default = "HTTP"
+  default = "TCP"
 }
 
 variable "back_lbl_port" {
@@ -171,7 +171,7 @@ variable "back_tg_target_type" {
 
 variable "back_tg_protocol" {
   type    = string 
-  default = "HTTP"
+  default = "TCP"
 }
 
 variable "back_tg_port" {

@@ -85,15 +85,15 @@ resource "aws_lb_target_group" "front-target-group" {
 
   # Los balanceadores de carga periodicamente envian solicitudes a sus objetivos registrados para probar su
   # status
-  health_check {
-    path                = "/"    # This is the destination for the health check request (you can specifya valid URI (/path?query))
-    protocol            = "HTTP" # This is the protocol used to connect with the target
-    matcher             = "200"  # The http code used when checking for a successful response from a target
-    interval            = 30     # The amount of time between health checks of an individual target
-    timeout             = 5      # The amount of time during which no response means a failed health check
-    healthy_threshold   = 5      # This is the number of consecutive health checks successes requerid before considering an unhealthy target healthy
-    unhealthy_threshold = 2      # This is the number of consecutive health checks failures requerid before considering the target unhealthy
-  }
+  # health_check {
+  #   path                = "/"    # This is the destination for the health check request (you can specifya valid URI (/path?query))
+  #   protocol            = "TCP" # This is the protocol used to connect with the target
+  #   matcher             = "200"  # The http code used when checking for a successful response from a target
+  #   interval            = 30     # The amount of time between health checks of an individual target
+  #   timeout             = 5      # The amount of time during which no response means a failed health check
+  #   healthy_threshold   = 5      # This is the number of consecutive health checks successes requerid before considering an unhealthy target healthy
+  #   unhealthy_threshold = 2      # This is the number of consecutive health checks failures requerid before considering the target unhealthy
+  # }
 
   tags = {
       "responsible" = var.tag_responsible

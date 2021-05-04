@@ -111,7 +111,7 @@ variable "front_lb_type" {
 
 variable "front_lbl_protocol" {
   type    = string
-  default = "HTTP"
+  default = "TCP"
 }
 
 variable "front_lbl_port" {
@@ -130,7 +130,7 @@ variable "front_tg_target_type" {
 
 variable "front_tg_protocol" {
   type    = string 
-  default = "HTTP"
+  default = "TCP"
 }
 
 variable "front_tg_port" {
