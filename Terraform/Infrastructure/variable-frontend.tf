@@ -95,6 +95,49 @@ variable "lb_front_sg_in_traffic_cird" {
   description = "This is the list of CIDR"
 }
 
+#############################
+## Load Balancer Variables ##
+#############################
+
+variable "front_lb_name" {
+  type    = string 
+  default = "front-tf-ALB"
+}
+
+variable "front_lb_type" {
+  type    = string
+  default = "network"
+}
+
+variable "front_lbl_protocol" {
+  type    = string
+  default = "HTTP"
+}
+
+variable "front_lbl_port" {
+  type    = string
+  default = 8080
+}
+
+############################
+## Target Group Variables ##
+############################
+
+variable "front_tg_target_type" {
+  type    = string
+  default = "instance"
+}
+
+variable "front_tg_protocol" {
+  type    = string 
+  default = "HTTP"
+}
+
+variable "front_tg_port" {
+  type    = number
+  default = 8080
+}
+
 ###############################
 ## Launch Template Variables ##
 ###############################

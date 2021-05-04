@@ -41,20 +41,20 @@ variable "back_sg_ingress_ssh_cird" {
 
 variable "back_sg_ingress_app_description" {
   type        = string
-  default     = "Allow traffic trough port 8080 from anywhere"
-  description = "This is the description for the inbound rule that allowed traffic through the port 8080 from the internet to the backend"
+  default     = "Allow traffic trough port 8089 from anywhere"
+  description = "This is the description for the inbound rule that allowed traffic through the port 8089 from the internet to the backend"
 }
 
 variable "back_sg_ingress_app_port" {
   type        = number
-  default     = 8080
-  description = "This is the port for the inbound rule that allowed traffic through the port 8080 from the internet to the backend"
+  default     = 8089
+  description = "This is the port for the inbound rule that allowed traffic through the port 8089 from the internet to the backend"
 }
 
 variable "back_sg_ingress_app_protocol" {
   type        = string
   default     = "tcp"
-  description = "This is the protocol for the inbound rule that allowed traffic through the port 8080 from the internet to the backend"
+  description = "This is the protocol for the inbound rule that allowed traffic through the port 8089 from the internet to the backend"
 }
 
 variable "back_sg_ingress_app_cird" {
@@ -134,3 +134,47 @@ variable "back_launch_template_instance_type" {
   default = "t2.micro"
 }
 
+
+
+#############################
+## Load Balancer Variables ##
+#############################
+
+variable "back_lb_name" {
+  type    = string 
+  default = "back-tf-ALB"
+}
+
+variable "back_lb_type" {
+  type    = string
+  default = "network"
+}
+
+variable "back_lbl_protocol" {
+  type    = string
+  default = "HTTP"
+}
+
+variable "back_lbl_port" {
+  type    = string
+  default = 8089
+}
+
+############################
+## Target Group Variables ##
+############################
+
+variable "back_tg_target_type" {
+  type    = string
+  default = "instance"
+}
+
+variable "back_tg_protocol" {
+  type    = string 
+  default = "HTTP"
+}
+
+variable "back_tg_port" {
+  type    = number
+  default = 8089
+}

@@ -1,3 +1,4 @@
+- import_playbook: all.yml
 - hosts: ui #se ejecuta solo para el target que tenga ui
   become: yes
   become_user: root
@@ -9,9 +10,9 @@
         name: appFront #nombre del contenedor que queremos mirar
       register: result #guarda el resultado del contendor
 
-    - name: Does container exists?
-      ansible_builtin.debug: 
-        msg: "The container {{ 'exists' if result.exists else 'doesn't exist' }}"
+    # - name: Does container exists?
+    #   ansible.builtin.debug: 
+    #     msg: "The container {{ 'exists' if result.exists else 'doesn't exist' }}"
       
     - name: Stop container
       docker_container:

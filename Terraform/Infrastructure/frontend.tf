@@ -20,7 +20,6 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_eip" "eip-lb" {
-  instance = aws_instance.lb-front.id
   vpc      = true
 }
 
@@ -75,6 +74,77 @@ resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.eip-ngw.id
   subnet_id     = data.aws_subnet.private-subnet-a.id
 }
+
+###Load balancer
+
+resource "aws_lb_target_group" "front-target-group" {
+  target_type = var.front_tg_target_type
+  protocol    = var.front_tg_protocol
+  port        = var.front_tg_port
+  vpc_id      = data.aws_vpc.grupo4-vpc.id
+
+  # Los balanceadores de carga periodicamente envian solicitudes a sus objetivos registrados para probar su
+  # status
+  health_check {
+    path                = "/"    # This is the destination for the health check request (you can specifya valid URI (/path?query))
+    protocol            = "HTTP" # This is the protocol used to connect with the target
+    matcher             = "200"  # The http code used when checking for a successful response from a target
+    interval            = 30     # The amount of time between health checks of an individual target
+    timeout             = 5      # The amount of time during which no response means a failed health check
+    healthy_threshold   = 5      # This is the number of consecutive health checks successes requerid before considering an unhealthy target healthy
+    unhealthy_threshold = 2      # This is the number of consecutive health checks failures requerid before considering the target unhealthy
+  }
+
+  tags = {
+      "responsible" = var.tag_responsible
+      "Name" = var.tag_responsible
+  }
+}
+
+#####################################################
+## Resource to create an application load balancer ##
+#####################################################
+
+resource "aws_lb" "front-tf-application-load-balancer" {
+  name               = var.front_lb_name
+  load_balancer_type = var.front_lb_type
+  ##subnets            = [ data.aws_subnet.public_subnet_id_a.id, data.public_subnet_id_b.id ]
+  ##security_groups    = [ aws_security_group.sg-load-balancer-front.id ]
+
+  subnet_mapping {
+    subnet_id     = data.aws_subnet.public-subnet-a.id
+    allocation_id = aws_eip.eip-lb.id
+  }
+
+  subnet_mapping {
+    subnet_id     = data.aws_subnet.public-subnet-b.id
+  }
+
+  tags = {
+      "responsible" = var.tag_responsible
+      "Name" = var.tag_responsible
+  }
+}
+
+
+########################################
+## Resource to create a listener rule ##
+########################################
+
+# Un listener es un proceso que comprueba las solicitudes de conexiónm utilizando el protocolo y el 
+# puerto que configura. Las reglas que defina para un listener determinan cómo el balancercador de carga
+# enruta las solicitudes a sus targets registrados 
+resource "aws_lb_listener" "lbl_front" {
+  load_balancer_arn = aws_lb.front-tf-application-load-balancer.arn
+  protocol          = var.front_lbl_protocol
+  port              = var.front_lbl_port
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.front-target-group.arn
+  }
+}
+
 
 
 ###Frontend##################
@@ -151,22 +221,6 @@ resource "aws_security_group" "sg-load-balancer-front" {
 }
 
 
-##EC2 Load Balancer
-resource "aws_instance" "lb-front" {
-  ami = var.ami_id
-  subnet_id = "subnet-086d80cc0d3b06c82"
-  instance_type = "t2.micro"
-  key_name               = var.key_name
-  vpc_security_group_ids = ["${aws_security_group.sg-load-balancer-front.id}"]
-  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
-
-
-  tags = {
-    Name = "estudiantes_automatizacion_2021_4_lb_front"
-  }
-}
-
-
 ##########################################
 ## Resource to create a launch template ##
 ##########################################
@@ -178,7 +232,7 @@ resource "aws_launch_template" "launch-template-front" {
   key_name               = var.key_name
   vpc_security_group_ids = [ aws_security_group.sg-front-instance.id ]
 
-  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
+  user_data = base64encode(templatefile("./front.sh", {back_host = aws_lb.back-tf-application-lb.dns_name}))
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_front"

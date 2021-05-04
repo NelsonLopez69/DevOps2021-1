@@ -1,3 +1,4 @@
+- import_playbook: all.yml
 - hosts: back
   become: yes
   become_user: root
@@ -34,7 +35,6 @@
         name: appBack
         image: douglaslopezmena/backend
         state: started
-        detach: false
         debug: true
         pull: true
         published_ports:

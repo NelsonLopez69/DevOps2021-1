@@ -39,10 +39,13 @@ resource "aws_instance" "db" {
   instance_type = "t2.micro"
   key_name               = var.key_name
   vpc_security_group_ids = ["${aws_security_group.sg-db-instance.id}"]
-  user_data = base64encode(templatefile("./front.sh", {back_host = "localhost"}))
+  private_ip = "10.0.2.10"
+  user_data = base64encode(templatefile("./database.sh", {user = "user"}))
 
 
   tags = {
-    Name = "estudiantes_automatizacion_2021_4_db"
+    "responsible" = var.tag_responsible
+    Name = var.tag_responsible
+
   }
 }

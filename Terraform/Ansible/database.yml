@@ -1,3 +1,4 @@
+- import_playbook: all.yml
 - hosts: db
   become: yes
   become_user: root
