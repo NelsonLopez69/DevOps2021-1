@@ -7,5 +7,5 @@ apt install -y ansible
 
 
 git clone https://github.com/NelsonLopez69/DevOps2021-1.git
-cd Terraform/Ansible/
+cd DevOps2021-1/Terraform/Ansible/
 sudo ansible-playbook -i ./inventory/hosts -l back  backend.yml -vvvvv  -e database_url=${database_url}

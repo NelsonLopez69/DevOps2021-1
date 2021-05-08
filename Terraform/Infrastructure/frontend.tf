@@ -15,16 +15,24 @@ resource "aws_internet_gateway" "igw" {
   vpc_id      = data.aws_vpc.grupo4-vpc.id
 
   tags = {
-    Name = "estudiantes_automatizacion_2021_4"
+    Name = "estudiantes_automatizacion_2021_4_igw"
   }
 }
 
 resource "aws_eip" "eip-lb" {
   vpc      = true
+  
+  tags = {
+    Name = "estudiantes_automatizacion_2021_4"
+  }
 }
 
 resource "aws_eip" "eip-ngw" {
   vpc  = true
+
+  tags = {
+    Name = "estudiantes_automatizacion_2021_4_ngw"
+  }
 }
 
 
@@ -85,19 +93,19 @@ resource "aws_lb_target_group" "front-target-group" {
 
   # Los balanceadores de carga periodicamente envian solicitudes a sus objetivos registrados para probar su
   # status
-  # health_check {
+  #  health_check {
   #   path                = "/"    # This is the destination for the health check request (you can specifya valid URI (/path?query))
-  #   protocol            = "TCP" # This is the protocol used to connect with the target
+  #   protocol            = "HTTP" # This is the protocol used to connect with the target
   #   matcher             = "200"  # The http code used when checking for a successful response from a target
-  #   interval            = 30     # The amount of time between health checks of an individual target
-  #   timeout             = 5      # The amount of time during which no response means a failed health check
-  #   healthy_threshold   = 5      # This is the number of consecutive health checks successes requerid before considering an unhealthy target healthy
-  #   unhealthy_threshold = 2      # This is the number of consecutive health checks failures requerid before considering the target unhealthy
-  # }
+  #    interval            = 30     # The amount of time between health checks of an individual target
+  #    timeout             = 5      # The amount of time during which no response means a failed health check
+  #    healthy_threshold   = 5      # This is the number of consecutive health checks successes requerid before considering an unhealthy target healthy
+  #    unhealthy_threshold = 2      # This is the number of consecutive health checks failures requerid before considering the target unhealthy
+  #  }
 
   tags = {
-      "responsible" = var.tag_responsible
-      "Name" = var.tag_responsible
+      responsible = var.tag_responsible
+      Name = var.tag_responsible
   }
 }
 
@@ -255,7 +263,7 @@ resource "aws_autoscaling_group" "front-tf-asg" {
   max_size            = 2
   min_size            = 2
   vpc_zone_identifier = [ data.aws_subnet.public-subnet-a.id, data.aws_subnet.public-subnet-b.id ]
-  ##target_group_arns   = [ aws_lb_target_group.front-target-group.arn ] ##Como especifico aqui que mi balanceador de carga es una ec2?
+  target_group_arns   = [ aws_lb_target_group.front-target-group.arn ]
 
   launch_template {
     id      = aws_launch_template.launch-template-front.id

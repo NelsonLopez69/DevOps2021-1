@@ -79,7 +79,7 @@ variable "lb_front_sg_in_traffic_description" {
 
 variable "lb_front_sg_in_traffic_port" {
   type        = number
-  default     = 0
+  default     = 8080
   description = "This is the port for the inbound rule that allowed traffic to the load balancer"
 }
 
