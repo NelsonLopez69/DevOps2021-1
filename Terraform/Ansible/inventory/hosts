@@ -4,8 +4,5 @@ frontend        ansible_connection=local
 [back]
 backend         ansible_connection=local
 
-[lb]
-loadbalancer    ansible_connection=local
-
 [db]
 database        ansible_connection=local

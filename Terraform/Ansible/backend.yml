@@ -1,4 +1,3 @@
-- import_playbook: all.yml
 - hosts: back
   become: yes
   become_user: root

@@ -1,4 +1,3 @@
-- import_playbook: all.yml
 - hosts: ui #se ejecuta solo para el target que tenga ui
   become: yes
   become_user: root
