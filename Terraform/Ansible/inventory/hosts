@@ -1,11 +1,17 @@
 [ui]
-frontend        ansible_connection=local
+frontend              ansible_connection=local
 
 [back]
-backend         ansible_connection=local
+backend               ansible_connection=local
 
-[lb]
-loadbalancer    ansible_connection=local
+[lb_front]
+loadbalancer_front    ansible_connection=local
+
+[lb_back]
+loadbalancer_back     ansible_connection=local
 
 [db]
-database        ansible_connection=local
+database              ansible_connection=local
+
+[jk]
+jenkins               ansible_connection=local
