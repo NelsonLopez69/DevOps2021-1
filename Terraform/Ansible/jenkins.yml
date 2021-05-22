@@ -1,22 +1,36 @@
-- hosts: jk
-  become: yes
-  become_user: root
-  become_method: sudo
-
+- name: Install Jenkins
+  hosts: jk
+  gather_facts: false
+  become: true
   tasks:
-    - name: Install OpenJDK
-      apt:
-        name: openjdk-8-jdk
-        state: present
-        update_cache: yes
+
+    - name: Add Oracle Java Repository
+      become: yes
+      apt_repository: repo='ppa:webupd8team/java'
+
+    - name: Accept Java 8 License
+      become: yes
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+    - name: Install Oracle Java 8
+      become: yes
+      apt: name={{item}} state=latest
+      with_items:
+        - oracle-java8-installer
+        - ca-certificates
+        - oracle-java8-set-default
+        
     - name: ensure the jenkins apt repository key is installed
       apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
 
     - name: ensure the repository is configured
       apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
 
     - name: ensure jenkins is installed
       apt: name=jenkins update_cache=yes
+      become: yes
 
     - name: ensure jenkins is running
       service: name=jenkins state=started
