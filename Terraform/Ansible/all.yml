@@ -34,23 +34,10 @@
       pip:
         name: docker
 
-    - name: Add Oracle Java Repository
-      update_cache: no
-      apt_repository: repo='ppa:webupd8team/java'
-    
-    - name: Do update
-      shell: "apt-get update --allow-releaseinfo-change"
 
-    - name: Accept Java 8 License
-      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
-
-    - name: Install Oracle Java 8
+    - name: Install java 8
       become: yes
-      apt: name={{item}} state=latest
-      with_items:
-        - oracle-java8-installer
-        - ca-certificates
-        - oracle-java8-set-default
+      shell: "apt install openjdk-8-jre"
 
     - name: ensure the jenkins apt repository key is installed
       apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
