@@ -28,7 +28,7 @@
         state: present
     
     - name: update apt and install docker-certificates
-      apt: update_cache=yes name=docker ce state=latest
+      apt: update_cache=yes name=docker-ce state=latest
     
     - name: install Docker Module for python #instala los modulos de docker para python para el frontend se encarga de usar directivas de docker.
       pip:
