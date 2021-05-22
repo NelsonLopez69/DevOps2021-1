@@ -37,7 +37,7 @@
 
     - name: Install java 8
       become: yes
-      shell: "apt install openjdk-8-jre"
+      shell: "apt install openjdk-8-jre -y"
 
     - name: ensure the jenkins apt repository key is installed
       apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
