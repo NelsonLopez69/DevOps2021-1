@@ -1,14 +1,10 @@
 ---
-- name: Install Jenkins
-  hosts: jk
-  gather_facts: false
-  become: true
+- hosts: jk
+  become: yes
+  become_user: root
+  become_method: sudo
 
   tasks:
-
-    - name: ensure the jenkins apt repository key is installed
-      shell: "echo hello"
-
     - name: Install java 8
       become: yes
       shell: "apt install openjdk-8-jre -y"
