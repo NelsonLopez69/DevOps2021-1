@@ -80,7 +80,7 @@ resource "aws_route_table_association" "private-subnet-b-rt" {
 
 resource "aws_nat_gateway" "ngw" {
   allocation_id = aws_eip.eip-ngw.id
-  subnet_id     = data.aws_subnet.private-subnet-a.id
+  subnet_id     = data.aws_subnet.public-subnet-a.id
 }
 
 ###Load balancer

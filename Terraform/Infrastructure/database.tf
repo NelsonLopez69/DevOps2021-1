@@ -40,7 +40,7 @@ resource "aws_instance" "db" {
   key_name               = var.key_name
   vpc_security_group_ids = ["${aws_security_group.sg-db-instance.id}"]
   private_ip = "10.0.2.10"
-  user_data = base64encode(templatefile("./database.sh", {user = "user"}))
+  user_data = base64encode(templatefile("./database.sh", {user = "admin", password = "password"}))
 
 
   tags = {

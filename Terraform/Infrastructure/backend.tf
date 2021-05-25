@@ -156,7 +156,7 @@ resource "aws_launch_template" "launch-template-back" {
   vpc_security_group_ids = [ aws_security_group.sg-back-instance.id ]
 
 
-  user_data = base64encode(templatefile("./back.sh", {database_url = "${aws_instance.db.private_ip}:5984"}))
+  user_data = base64encode(templatefile("./back.sh", {database_url = "http://admin:password@${aws_instance.db.private_ip}:5984"}))
 
   tags = {
     Name = "estudiantes_automatizacion_2021_4_back"

@@ -1,35 +1,54 @@
-- hosts: all
+- hosts: all #Porque tanto el front y el backend necesita todas las tareas de abajo
   become: yes
   become_user: root
   become_method: sudo
 
   tasks:
-    - name: Install aptitude using apt
-      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
-
-    - name: Install required system packages
+    - name: install aptitude using apt
+      apt: name=aptitude state=latest
+      
+    - name: install required system packages
       apt: name = {{ item }} state=latest update_cache=yes
       loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
-    
-    - name: Install pip
+
+    - name: install pip
       apt:
         name: python3-pip
         update_cache: yes
         state: present
-        
-    - name: Add Docker GPG apt Key
+
+    - name: add Docker GPG apt Key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-        
-    - name: Add Docker Repository
+      
+    - name: add Docker repository
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu bionic stable
         state: present
-
-    - name: Update apt and install docker-ce
+    
+    - name: update apt and install docker-certificates
       apt: update_cache=yes name=docker-ce state=latest
-
-    - name: Install Docker Module for Python
+    
+    - name: install Docker Module for python #instala los modulos de docker para python para el frontend se encarga de usar directivas de docker.
       pip:
         name: docker
+    
+    - name: Install java 8
+      become: yes
+      shell: "apt install openjdk-8-jre -y"
+
+    - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
+
+    - name: ensure the repository is configured
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
+
+    - name: Install jenkins
+      apt: name=jenkins update_cache=yes
+      become: yes
+
+    - name: ensure jenkins is running
+      service: name=jenkins state=started
