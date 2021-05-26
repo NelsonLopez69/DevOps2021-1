@@ -1,4 +1,4 @@
-[ui]
+[estudiantes_automatizacion_2021_4_front]
 frontend        ansible_connection=local
 
 [back]

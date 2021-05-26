@@ -6,4 +6,4 @@ apt install -y ansible
 
 git clone https://github.com/NelsonLopez69/DevOps2021-1.git
 cd DevOps2021-1/Terraform/Ansible/
-ansible-playbook -i ./inventory/hosts -l ui  site.yml -vvvvv  -e back_host=${back_host} 
+ansible-playbook -i ./inventory/hosts -l estudiantes_automatizacion_2021_4_front  site.yml -vvvvv  -e back_host=${back_host} 

@@ -11,3 +11,5 @@ cd DevOps2021-1/
 cd Terraform/Ansible
 
 sudo ansible-playbook -i ./inventory/hosts  all.yml -vvv
+
+//agregar el usuario de docker y restart el servicio
