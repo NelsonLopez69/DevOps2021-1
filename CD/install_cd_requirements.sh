@@ -98,4 +98,4 @@ echo "**************************************"
 echo "**************************************"
 echo "**************************************"
 
-sudo chmod 400 /home/ubuntu/rootAutomatizacion.pem
+sudo chmod 400 /home/ubuntu/estudiantes_automatizacion_2021_4.pem

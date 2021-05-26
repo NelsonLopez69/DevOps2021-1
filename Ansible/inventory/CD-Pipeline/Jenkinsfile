@@ -1,0 +1,25 @@
+node {
+  step([$class: 'WsCleanup'])
+
+
+  stage('Checkout aditional repo') {
+    dir('CM') {
+      git branch: 'main', url:"https://github.com/NelsonLopez69/DevOps2021-1.git"
+    }
+  }
+
+  stage('Execute deployment with ansible') {
+    dir('CM') {
+      sh """
+        sudo ansible-playbook -i Terraform/Ansible/aws_ec2.yaml \
+        -l tag_Name_estudiantes_automatizacion_2021_4_front \
+        site.yml \
+        --private-key="${env.pemPath}" \
+        -u ubuntu -vvv \
+        -e tag=${params.TAG} \
+        -e back_host="${env.back_ip}"
+      """
+    }
+  }
+
+}
