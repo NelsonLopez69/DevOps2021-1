@@ -11,7 +11,9 @@ node {
   stage('Execute deployment with ansible') {
     dir('CM') {
       sh """
-        sudo ansible-playbook -i Terraform/Ansible/aws_ec2.yaml \
+        pwd
+        ls
+        sudo ansible-playbook -i ./Terraform/Ansible/aws_ec2.yaml \
         -l tag_Name_estudiantes_automatizacion_2021_4_front \
         site.yml \
         --private-key="${env.pemPath}" \
