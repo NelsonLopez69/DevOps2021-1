@@ -27,6 +27,14 @@ resource "aws_security_group" "allow_ssh_jenkins" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    # SSH Port 80 allowed from any IP
+    from_port   = 8082
+    to_port     = 8082
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
