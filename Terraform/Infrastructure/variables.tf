@@ -35,7 +35,7 @@ variable "private_subnet_id_b" {
 
 variable "ami_id" {
   type    = string
-  default = "ami-08962a4068733a2b6"
+  default = "ami-00399ec92321828f5"
 }
 
 variable "tag_responsible" {

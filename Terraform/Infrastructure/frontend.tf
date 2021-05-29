@@ -251,8 +251,8 @@ resource "aws_launch_template" "launch-template-front" {
 ##############################################
 
 resource "aws_autoscaling_group" "front-tf-asg" {
-  max_size            = 3
-  min_size            = 3
+  max_size            = 2
+  min_size            = 2
   vpc_zone_identifier = [ data.aws_subnet.public-subnet-a.id, data.aws_subnet.public-subnet-b.id ]
   target_group_arns   = [ aws_lb_target_group.front-target-group.arn ]
 
