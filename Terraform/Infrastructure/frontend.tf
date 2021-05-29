@@ -11,14 +11,6 @@
 
 ##Network
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id      = data.aws_vpc.grupo4-vpc.id
-
-  tags = {
-    Name = "estudiantes_automatizacion_2021_4_igw"
-  }
-}
-
 resource "aws_eip" "eip-lb" {
   vpc      = true
   
@@ -41,15 +33,14 @@ resource "aws_route_table" "rt-public" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = var.igw_id
   }
 
 }
 
-resource "aws_route_table_association" "public-subnet-a-rt" {
-  subnet_id     = data.aws_subnet.public-subnet-a.id
-  route_table_id = aws_route_table.rt-public.id
-}
+
+
+
 
 resource "aws_route_table_association" "public-subnet-b-rt" {
   subnet_id     = data.aws_subnet.public-subnet-b.id

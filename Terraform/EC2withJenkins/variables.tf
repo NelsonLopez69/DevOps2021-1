@@ -18,7 +18,8 @@ variable "vpc_id" {
     type = string
     default = "vpc-08088d2c954a0836f"
 }
-variable "subnet_id" {
+
+variable "subnet_id_a" {
     type = string
     default = "subnet-086d80cc0d3b06c82"
 }
