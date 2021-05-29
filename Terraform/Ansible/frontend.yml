@@ -1,4 +1,5 @@
 - hosts: tag_Name_estudiantes_automatizacion_2021_4_front #se ejecuta solo para el target que tenga ui
+  gather_facts: no  
   become: yes
   become_user: root
   become_method: sudo

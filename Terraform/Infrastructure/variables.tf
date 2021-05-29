@@ -3,6 +3,10 @@ variable "aws_region" {
     default = "us-east-2"
 }
 
+variable "igw_id" {
+  type = string
+  default = "igw-09e5ae8085e45737b"
+}
 
 variable "vpc_id" {
     type = string

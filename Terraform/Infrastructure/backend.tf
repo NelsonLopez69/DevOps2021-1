@@ -176,8 +176,8 @@ resource "aws_launch_template" "launch-template-back" {
 ##############################################
 
 resource "aws_autoscaling_group" "back-tf-asg" {
-  max_size            = 2
-  min_size            = 2
+  max_size            = 3
+  min_size            = 3
   vpc_zone_identifier = [ data.aws_subnet.private-subnet-a.id, data.aws_subnet.private-subnet-b.id ]
   target_group_arns   = [ aws_lb_target_group.back-target-group.arn ]
 
