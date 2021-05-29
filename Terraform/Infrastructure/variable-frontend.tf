@@ -149,6 +149,6 @@ variable "front_launch_template_name" {
 
 variable "front_launch_template_instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t2.small"
 }
 

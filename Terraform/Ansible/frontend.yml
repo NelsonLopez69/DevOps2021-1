@@ -38,5 +38,5 @@
         published_ports:
           - "8080:8080"
         env: #variables de entorno del front
-          BACK_HOST: '{{ back_host }}' #esta variable se pasa cuando llamemos al playbook con -e
+          BACKEND_HOST: '{{ back_host }}' #esta variable se pasa cuando llamemos al playbook con -e
 
