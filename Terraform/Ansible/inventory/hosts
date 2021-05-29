@@ -6,3 +6,6 @@ backend         ansible_connection=local
 
 [db]
 database        ansible_connection=local
+
+[jk]
+jenkins         ansible_connection=local
